@@ -6,7 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/titi/Downloads/jsoup-1.15.3.jar"/>
+	<classpathentry kind="lib" path="/Users/titi/Desktop/jsoup-1.15.3.jar"/>
 	<classpathentry kind="lib" path="/Users/titi/Downloads/apache-tomcat-10.0.27/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

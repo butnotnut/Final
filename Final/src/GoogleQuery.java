@@ -49,15 +49,7 @@ public class GoogleQuery {
 		{
 			content = fetchContent();
 		}
-
 		HashMap<String, String> retVal = new HashMap<String, String>();
-		
-		
-		/* 
-		 * some Jsoup source
-		 * https://jsoup.org/apidocs/org/jsoup/nodes/package-summary.html
-		 * https://www.1ju.org/jsoup/jsoup-quick-start
- 		 */
 		
 		//using Jsoup analyze html string
 		Document doc = Jsoup.parse(content);
@@ -79,22 +71,17 @@ public class GoogleQuery {
 				{
 					continue;
 				}
-//				System.out.println(title);
-//				System.out.println(citeUrl);
-				
-				
+								
 				//simplify website
 				citeUrl = citeUrl.substring(citeUrl.indexOf("https"), citeUrl.indexOf(stop));
-//				System.out.println(citeUrl);
 				
-
 				
 				//put title and pair into HashMap
 				retVal.put(title, citeUrl);
 
 			} catch (IndexOutOfBoundsException e) 
 			{
-//				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 		return retVal;

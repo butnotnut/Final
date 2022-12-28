@@ -33,16 +33,16 @@ public class KeywordHeap {
 		
 		public void output(){
 			//print the output in order and remove all element
-//			StringBuilder sb = new StringBuilder();
-			ArrayList<Keyword> arrayList = new ArrayList<>();
+			ArrayList<Keyword> arrayList = new ArrayList<Keyword>();
 			Keyword k;
+
 			while(heap.peek()!=null){
 				k = heap.poll();
-//				sb.append(k);
-				arrayList.add(0, k);;
+				/*移除root page(不是搜尋出來的結果)*/
+				if(!(k.name=="運動比賽觀看")) 
+					arrayList.add(0, k);
 			}
-			
-//			System.out.println(sb.toString());	
+
 			for(Keyword i:arrayList){
 				System.out.println(i.name);
 			}

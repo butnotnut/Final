@@ -35,7 +35,7 @@ public WebNode root;
 		System.out.print("(");
 		System.out.print(startNode.webPage.name + "," + startNode.nodeScore);
 		
-		//3. print child via pre-order
+		//print child via preorder
 		for(WebNode child: startNode.children){
 			eularPrintTree(child);
 		}
@@ -52,13 +52,14 @@ public WebNode root;
 	}
 	
 	private void constructHeap(WebNode root,ArrayList<Keyword>arrayList)throws IOException{
+		Keyword rootKeyword = new Keyword(root.webPage.name, root.nodeScore);
+		arrayList.add(rootKeyword);
+		
 		if(root.children.size()!=0){
 			for(WebNode w: root.children){
 				constructHeap(w, arrayList);
 			}
 		}
-		Keyword rootKeyword = new Keyword(root.webPage.name, root.nodeScore);
-		arrayList.add(rootKeyword);
 	}
 	
 	public void printHeap(KeywordHeap heap,ArrayList<Keyword> arrayList)throws IOException{
@@ -75,4 +76,19 @@ public WebNode root;
 		}
 		return retVal;
 	}
+	
+	public int treeSize(WebTree this){
+		return treeSize(this.root);
+	}
+	
+	private int treeSize(WebNode node){
+		int size=1;
+		if(node.children.size()!=0){
+			for(WebNode child: node.children){
+				size += treeSize(child);
+			}
+		}
+		return size;
+	}
+
 }

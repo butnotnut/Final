@@ -1,51 +1,92 @@
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.jar.Attributes.Name;
 
+import javax.lang.model.element.Element;
 import javax.lang.model.type.TypeKind;
+import javax.naming.spi.DirStateFactory.Result;
 
 import org.jsoup.select.Evaluator.IsEmpty;
+import org.json.JSONObject;
+import org.json.*;
+
 
 public class Main {
 	public static void main(String[] args) throws IOException {
+		ArrayList<Keyword> keywords = new ArrayList<Keyword>();
+
+
 		//heap
 		KeywordHeap heap = new KeywordHeap(); 
 		//root node
 		WebPage rootPage = new WebPage("https://www.google.com", "運動比賽觀看");	
 		WebTree tree = new WebTree(rootPage);
 		
+	
 		
-		/*動態新增WebNode*/
-		/*原本打算加入網站的子網站，但限縮在運動比賽觀看的話，通常也只有那幾個網站，所以在此不動態新增*/
-		tree.root.addChild(new WebNode(new WebPage("https://hamivideo.hinet.net/%E9%81%8B%E5%8B%95%E9%A4%A8.do","HamiVideo")));
-		tree.root.addChild(new WebNode(new WebPage("https://eltaott.tv/","elta")));
-		tree.root.children.get(1).addChild(new WebNode(new WebPage("https://eltaott.tv/channel/play/101/1", "elta1")));
-		tree.root.addChild(new WebNode(new WebPage("https://www.youtube.com/channel/UC3P83RUWwKbZ4bkhNti4ZuQ", "緯來體育台yt")));
-		tree.root.addChild(new WebNode(new WebPage("https://www.sportslottery.com.tw/","台灣運彩")));
-
-		
-		System.out.println("Search: ");
-		Scanner scanner = new Scanner(System.in);
-		
-		while(scanner.hasNextLine()){
-			/*加關鍵字*/
-			ArrayList<Keyword> keywords = new ArrayList<Keyword>();
-			
-			/*輸入終止條件*/
-			while(!scanner.hasNext("."))
-			{
-				String name = scanner.next();
-				/*給使用者自調權重*/
-				//double weight = scanner.nextDouble();
-				
-				Keyword k = new Keyword(name, 1);//權重預設為1
-				keywords.add(k);
+		//GoogleQuery
+		HashMap<String,String> g = new GoogleQuery("運動比賽觀看平台").query();
+		Collection<String> h = new GoogleQuery("運動比賽觀看平台").query().keySet();
+		for(String title : h)
+		{
+			try {
+				/*檢查網案是否產生404NotFound，是的話則不加入樹的節點*/
+				URL u = new URL(g.get(title));
+				InputStream c = u.openConnection().getInputStream();
+				/*動態新增WebNode*/
+				tree.root.addChild(new WebNode(new WebPage(g.get(title),title)));
+			} catch (Exception e) {
+				// TODO: Do Nothing
 			}
-			tree.setPostOrderScore(keywords);
-			tree.printHeap(heap, tree.constructHeap(tree));
-			break;
+
+			/*決定樹的大小*/
+			/*
+			 * if(tree.treeSize()>5)
+			 * break;
+			*/
 		}
+		
+		/*系統設定關鍵字*/
+		String[] setKey = {"broadcast", "final", "semifinal", "quarter final", "replay", "full match", "medal", "stadium", "field", "captain", "athletics", 
+				"commentate", "highlight", "live", "play", "singles", "doubles", "gold", "silver", "bronze", "won", "game", "match", "champion", "觀看", 
+				"轉播", "直播", "賽事"};
+		for(String k:setKey)
+		{
+			Keyword keyword = new Keyword(k, 1);
+			keywords.add(keyword);
+		}
+		
+		/*詢問使用者要輸入什麼關鍵字*/
+		System.out.print("Search: ");
+		Scanner scanner = new Scanner(System.in);
+		String name = scanner.nextLine();
+		/*儲存使用者關鍵字*/
+		String[] namelist = name.split(" ");
+		for(int i=0;i<namelist.length;i++)
+		{
+			/*權重依據關鍵字多寡*/
+			Keyword k = new Keyword(name, 100/namelist.length);
+			keywords.add(k);
+		}
+		
+		tree.setPostOrderScore(keywords);
+		/*查看分數
+		tree.eularPrintTree();
+		*/ 
+		tree.printHeap(heap, tree.constructHeap(tree));
+		
 		scanner.close();
 	}
 }

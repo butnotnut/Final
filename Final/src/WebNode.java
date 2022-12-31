@@ -32,6 +32,11 @@ public class WebNode {
 		child.parent = this;
 	}
 	
+	public void delChild(WebNode child){
+		//add the WebNode to its children list
+		this.children.remove(child);
+	}
+	
 	public boolean isTheLastChild(){
 		if(this.parent == null) return true;
 		ArrayList<WebNode> siblings = this.parent.children;

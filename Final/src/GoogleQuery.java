@@ -57,6 +57,8 @@ public class GoogleQuery {
 		//select particular element(tag) which you want 
 		Elements lis = doc.select("div");
 		lis = lis.select(".kCrYT");
+
+
 		
 		
 		for(Element li : lis)
@@ -72,9 +74,9 @@ public class GoogleQuery {
 					continue;
 				}
 								
-				//simplify website
+				//simplify url
 				citeUrl = citeUrl.substring(citeUrl.indexOf("https"), citeUrl.indexOf(stop));
-				
+
 				
 				//put title and pair into HashMap
 				retVal.put(title, citeUrl);

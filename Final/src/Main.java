@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,9 @@ import org.json.*;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		ArrayList<Keyword> keywords = new ArrayList<Keyword>();
-
+		URL u;
+		InputStream c;
+		int j=0;//計數用
 
 		//heap
 		KeywordHeap heap = new KeywordHeap(); 
@@ -34,8 +37,9 @@ public class Main {
 		WebPage rootPage = new WebPage("https://www.google.com", "運動比賽觀看");	
 		WebTree tree = new WebTree(rootPage);
 		
-	
-		
+		/*顯示進度(1/3)*/
+		System.out.print("Running");
+
 		//GoogleQuery
 		HashMap<String,String> g = new GoogleQuery("運動比賽觀看平台").query();
 		Collection<String> h = new GoogleQuery("運動比賽觀看平台").query().keySet();
@@ -43,10 +47,16 @@ public class Main {
 		{
 			try {
 				/*檢查網案是否產生404NotFound，是的話則不加入樹的節點*/
-				URL u = new URL(g.get(title));
-				InputStream c = u.openConnection().getInputStream();
+				u = new URL(g.get(title));
+				c = u.openConnection().getInputStream();
 				/*動態新增WebNode*/
 				tree.root.addChild(new WebNode(new WebPage(g.get(title),title)));
+				
+				/*顯示進度(2/3)*/
+				if(j%4==0)
+					System.out.print(".");
+				j++;
+
 			} catch (Exception e) {
 				// TODO: Do Nothing
 			}
@@ -62,11 +72,20 @@ public class Main {
 		String[] setKey = {"broadcast", "final", "semifinal", "quarter final", "replay", "full match", "medal", "stadium", "field", "captain", "athletics", 
 				"commentate", "highlight", "live", "play", "singles", "doubles", "gold", "silver", "bronze", "won", "game", "match", "champion", "觀看", 
 				"轉播", "直播", "賽事"};
+		String[] setbadKey = {"免費"};
 		for(String k:setKey)
 		{
 			Keyword keyword = new Keyword(k, 1);
 			keywords.add(keyword);
 		}
+		for(String k:setbadKey)
+		{
+			Keyword keyword = new Keyword(k, -50);
+			keywords.add(keyword);
+		}
+		
+		/*顯示進度(3/3)*/
+		System.out.println();
 		
 		/*詢問使用者要輸入什麼關鍵字*/
 		System.out.print("Search: ");
@@ -77,7 +96,7 @@ public class Main {
 		for(int i=0;i<namelist.length;i++)
 		{
 			/*權重依據關鍵字多寡*/
-			Keyword k = new Keyword(name, 100/namelist.length);
+			Keyword k = new Keyword(name, 200/namelist.length);
 			keywords.add(k);
 		}
 		

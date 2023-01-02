@@ -18,6 +18,7 @@ import java.util.jar.Attributes.Name;
 import javax.lang.model.element.Element;
 import javax.lang.model.type.TypeKind;
 import javax.naming.spi.DirStateFactory.Result;
+import javax.servlet.ServletException;
 
 import org.jsoup.select.Evaluator.IsEmpty;
 import org.json.JSONObject;
@@ -25,11 +26,12 @@ import org.json.*;
 
 
 public class Main {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ServletException{
 		ArrayList<Keyword> keywords = new ArrayList<Keyword>();
 		URL u;
 		InputStream c;
 		int j=0;//計數用
+		
 
 		//heap
 		KeywordHeap heap = new KeywordHeap(); 
@@ -37,10 +39,11 @@ public class Main {
 		WebPage rootPage = new WebPage("https://www.google.com", "運動比賽觀看");	
 		WebTree tree = new WebTree(rootPage);
 		
+		
 		/*顯示進度(1/3)*/
 		System.out.print("Running");
 
-		//GoogleQuery
+		//GoogleQuery		
 		HashMap<String,String> g = new GoogleQuery("運動比賽觀看平台").query();
 		Collection<String> h = new GoogleQuery("運動比賽觀看平台").query().keySet();
 		for(String title : h)
@@ -68,11 +71,12 @@ public class Main {
 			*/
 		}
 		
+		
 		/*系統設定關鍵字*/
-		String[] setKey = {"broadcast", "final", "semifinal", "quarter final", "replay", "full match", "medal", "stadium", "field", "captain", "athletics", 
-				"commentate", "highlight", "live", "play", "singles", "doubles", "gold", "silver", "bronze", "won", "game", "match", "champion", "觀看", 
-				"轉播", "直播", "賽事"};
-		String[] setbadKey = {"免費"};
+		String[] setKey = {"broadcast", "replay", "full match", "medal", "stadium", "field", "captain", "athletics", 
+				"commentate", "highlight", "live", "play", "Live", "game", "match", "champion", "觀看", "Video",
+				"轉播", "直播", "賽事", "體育", "線上看", "運動", "線上看" };
+		String[] setbadKey = {"國外", "購物", "新聞", "盤點", "免費"};
 		for(String k:setKey)
 		{
 			Keyword keyword = new Keyword(k, 1);
@@ -80,7 +84,7 @@ public class Main {
 		}
 		for(String k:setbadKey)
 		{
-			Keyword keyword = new Keyword(k, -50);
+			Keyword keyword = new Keyword(k, -10);
 			keywords.add(keyword);
 		}
 		
@@ -91,19 +95,24 @@ public class Main {
 		System.out.print("Search: ");
 		Scanner scanner = new Scanner(System.in);
 		String name = scanner.nextLine();
+
+
 		/*儲存使用者關鍵字*/
 		String[] namelist = name.split(" ");
 		for(int i=0;i<namelist.length;i++)
 		{
 			/*權重依據關鍵字多寡*/
-			Keyword k = new Keyword(name, 200/namelist.length);
+			Keyword k = new Keyword(name, 100/namelist.length);
 			keywords.add(k);
 		}
+
 		
+		System.out.println();
+		System.out.println("Result: ");
 		tree.setPostOrderScore(keywords);
 		/*查看分數
 		tree.eularPrintTree();
-		*/ 
+		*/
 		tree.printHeap(heap, tree.constructHeap(tree));
 		
 		scanner.close();

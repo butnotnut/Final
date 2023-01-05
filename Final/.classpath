@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/titi/Desktop/jsoup-1.15.3.jar"/>
-	<classpathentry kind="lib" path="/Users/titi/Downloads/apache-tomcat-10.0.27/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Users/81815/Downloads/jsoup-1.15.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/81815/Downloads/apache-tomcat-8.5.84/apache-tomcat-8.5.84/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="/Users/titi/Desktop/json-20220924.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

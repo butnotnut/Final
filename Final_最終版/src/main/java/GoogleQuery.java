@@ -67,6 +67,7 @@ public class GoogleQuery {
 			try 
 			{
 				String citeUrl = li.select("a").get(0).attr("href");
+//				citeUrl = java.net.URLDecoder.decode(citeUrl, "UTF-8");
 				String title = li.select("a").get(0).select(".vvjwJb").text();
 				String stop = "&sa=U&ved";
 				

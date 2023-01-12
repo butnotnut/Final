@@ -38,6 +38,8 @@ public class TestProject extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String a = "運動比賽觀看平台";
+		String b = "sports,stream";
+		String bb = "放送";
 		response.setCharacterEncoding("UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html");
@@ -59,7 +61,19 @@ public class TestProject extends HttpServlet {
 		WebTree tree = new WebTree(rootPage);
 
 		// GoogleQuery
-		String web_keyword = request.getParameter("keyword")+a;
+		
+		String web_keyword = request.getParameter("keyword");
+		if(web_keyword.matches("[\\u4E00-\\u9FA5]+"))  
+	     {  
+			web_keyword = web_keyword + a;  
+	     } else if(web_keyword.matches("[\\u0041-\\u005A]+") || web_keyword.matches("[\\u0061-\\u007A]+")) {
+	    	 web_keyword = web_keyword + b;
+	     }else if(web_keyword.matches("[\\u3041-\\u309F]+") || web_keyword.matches("[\\u30A1-\\u30FF]+")) {
+	    	 web_keyword = web_keyword + bb;
+	     }
+		
+//		スポーツ観戦プラットフォーム
+//		String web_keyword = request.getParameter("keyword")+a;
 		
 		HashMap<String, String> g = new GoogleQuery(web_keyword).query();
 
